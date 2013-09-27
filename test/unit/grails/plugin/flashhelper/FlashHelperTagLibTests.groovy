@@ -106,9 +106,9 @@ class FlashHelperTagLibTests {
         }
 
         // Change the default behaviour to error
-        // TODO: Reinstate this test once I figure out how to do the equivalent of mockConfig in Grails 2.0.X
+        // TODO: Reinstate this test
         /*
-        mockConfig('''flashHelper.keyNotFound="error"''')
+        grailsApplication.config.flashHelper.keyNotFound = "error"
 
         shouldFail(FlashKeyException) {
             tagLib.msg(key: 'badKey')
@@ -126,9 +126,9 @@ class FlashHelperTagLibTests {
         tagLib.msgBody(key: 'badKey')
 
         // Change the default behaviour to error, but override it in each tag
-        // TODO: Reinstate this test once I figure out how to do the equivalent of mockConfig in Grails 2.0.X
+        // TODO: Reinstate this test
         /*
-        mockConfig('''flashHelper.keyNotFound="error"''')
+        grailsApplication.config.flashHelper.keyNotFound = "error"
 
         tagLib.msg(key: 'badKey', keyNotFound: 'warn')
         tagLib.msgBody(key: 'badKey', keyNotFound: 'ignore')
