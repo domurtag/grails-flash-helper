@@ -1,5 +1,6 @@
 package grails.plugin.flashhelper
 
+import grails.test.ControllerUnitTestCase
 import org.springframework.context.NoSuchMessageException
 
 
@@ -8,7 +9,7 @@ import org.springframework.context.NoSuchMessageException
  * Tests for <code>FlashHelper</code>. I'm using <code>ControllerUnitTestCase</code> only as a means of getting
  * a reference to a controller, which I'll need to instantiate the <code>FlashHelper</code>
  */
-public class FlashHelperTestControllerTests extends grails.test.ControllerUnitTestCase {
+public class FlashHelperTestControllerTests extends ControllerUnitTestCase {
 
     /**
      * The key under which messages will be stored in the flash (not to be confused with the keys in messages*.properties)

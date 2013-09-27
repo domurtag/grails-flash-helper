@@ -1,4 +1,5 @@
-grails-flash-helper
+Flash Helper Grails Plugin
 ===================
 
-Grails plugin that simplifies and standardizes the process of adding/reading messages in the flash scope
+Grails plugin that simplifies and standardizes the process of adding/reading messages in the flash scope.
+Documentation for this plugin is available on the [Grails website](http://grails.org/plugin/flash-helper).
