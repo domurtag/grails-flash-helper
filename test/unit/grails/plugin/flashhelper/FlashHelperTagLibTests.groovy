@@ -53,13 +53,10 @@ class FlashHelperTagLibTests {
         verifySeparatedOutput(separator, output)
 
         // Test a separator provided in Config.groovy
-        // TODO: Reinstate this test once I figure out how to do the equivalent of mockConfig in Grails 2.0.X
-        /*
         separator = '_'
-        GrailsUnitTestCase.mockConfig("flashHelper.separator='$separator'".toString())
+        grailsApplication.config.flashHelper.separator = separator
         output = tagLib.msg(key: 'msgList', sep: separator)
         verifySeparatedOutput(separator, output)
-        */
     }
 
     private void verifySeparatedOutput(separator, output) {
