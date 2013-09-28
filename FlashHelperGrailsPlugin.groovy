@@ -1,4 +1,5 @@
 import grails.plugin.flashhelper.FlashHelper
+import org.springframework.context.MessageSource
 
 class FlashHelperGrailsPlugin {
 
@@ -43,15 +44,13 @@ Simplifies and standardizes the process of adding/reading messages in the flash 
     def scm = [ url: "https://github.com/domurtag/grails-flash-helper" ]
 
     def doWithWebDescriptor = {xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before 
     }
 
     def doWithSpring = {
-        // TODO Implement runtime spring config (optional)
     }
 
     def doWithDynamicMethods = {ctx ->
-        configureFlashHelper(application, ctx)
+        addFlashHelperMethod(application, ctx)
     }
 
     def doWithApplicationContext = {applicationContext ->
@@ -62,7 +61,7 @@ Simplifies and standardizes the process of adding/reading messages in the flash 
         // Implement code that is executed when any artefact that this plugin is
         // watching is modified and reloaded. The event contains: event.source,
         // event.application, event.manager, event.ctx, and event.plugin.
-        configureFlashHelper(event.application, event.ctx)
+        addFlashHelperMethod(event.application, event.ctx)
     }
 
     def onConfigChange = {event ->
@@ -73,23 +72,21 @@ Simplifies and standardizes the process of adding/reading messages in the flash 
     /**
      * add getFlashHelper() to controllers
      */
-    def configureFlashHelper(application, applicationContext) {
+    private addFlashHelperMethod(application, applicationContext) {
 
-        def messageSource = applicationContext.getBean('messageSource')
+        MessageSource messageSource = applicationContext.getBean('messageSource')
 
         application.controllerClasses*.metaClass*.getFlashHelper = {
 
             def controllerInstance = delegate
+            MetaClass controllerMetaClass = controllerInstance.metaClass
 
             // Avoid creating a new FlashHelper each time the 'flashHelper' property is accessed
-            if (!controllerInstance.metaClass.hasProperty('flashHelperInstance')) {
-                controllerInstance.metaClass.flashHelperInstance = new FlashHelper(controllerInstance, messageSource)
+            if (!controllerMetaClass.hasProperty('flashHelperInstance')) {
+                controllerMetaClass.flashHelperInstance = new FlashHelper(controllerInstance, messageSource)
             }
 
-            // Return the FlashHelper instance. There may be a simpler way, but I tried
-            // controllerInstance.metaClass.getMetaProperty('flashHelperInstance')
-            // and it didn't work
-            return controllerInstance.metaClass.getMetaProperty('flashHelperInstance').getter.invoke(controllerInstance)
+            return controllerInstance.flashHelperInstance
         }
     }
 }

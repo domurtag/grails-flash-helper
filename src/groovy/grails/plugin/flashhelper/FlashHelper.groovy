@@ -18,8 +18,6 @@ class FlashHelper {
     private controller
     private MessageSource messageSource
 
-    private static def log = org.apache.commons.logging.LogFactory.getLog(this)
-
     public FlashHelper(controller, MessageSource messageSource) {
         this.controller = controller
         this.messageSource = messageSource
