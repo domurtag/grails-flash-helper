@@ -107,7 +107,6 @@ class FlashHelperTagLibTests {
 
         // Change the default behaviour to error
         // TODO: Reinstate this test
-        /*
         grailsApplication.config.flashHelper.keyNotFound = "error"
 
         shouldFail(FlashKeyException) {
@@ -117,21 +116,20 @@ class FlashHelperTagLibTests {
         shouldFail(FlashKeyException) {
             tagLib.msgBody(key: 'badKey')
         }
-        */
     }
 
     void testIgnoreMissingKey() {
+
+        // if the config property is not set, then by default a bad key does not cause an error
+        grailsApplication.config.flashHelper.keyNotFound = null
 
         tagLib.msg(key: 'badKey')
         tagLib.msgBody(key: 'badKey')
 
         // Change the default behaviour to error, but override it in each tag
-        // TODO: Reinstate this test
-        /*
         grailsApplication.config.flashHelper.keyNotFound = "error"
 
         tagLib.msg(key: 'badKey', keyNotFound: 'warn')
         tagLib.msgBody(key: 'badKey', keyNotFound: 'ignore')
-        */
     }
 }
