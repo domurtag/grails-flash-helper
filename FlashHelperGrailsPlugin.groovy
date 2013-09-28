@@ -89,7 +89,7 @@ Simplifies and standardizes the process of adding/reading messages in the flash 
             // Return the FlashHelper instance. There may be a simpler way, but I tried
             // controllerInstance.metaClass.getMetaProperty('flashHelperInstance')
             // and it didn't work
-            return controllerInstance.metaClass.getMetaProperty('flashHelperInstance').getter.invoke(controllerInstance, [] as Object[])
+            return controllerInstance.metaClass.getMetaProperty('flashHelperInstance').getter.invoke(controllerInstance)
         }
     }
 }
