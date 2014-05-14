@@ -13,18 +13,13 @@ import org.springframework.context.support.DefaultMessageSourceResolvable
 public class FlashHelperTestControllerTests extends ControllerUnitTestCase {
 
     /**
-     * The key under which messages will be stored in the flash (not to be confused with the keys in messages*.properties)
-     */
-    private final flashKey = 'info'
-
-    /**
      * Creates a single message or a list of messages
      */
     private getMessages(Range range = null) {
         range ? range.collect { "message number $it" } : "message number 1"
     }
 
-    private getFlashHelper() {
+    private FlashHelper getFlashHelper() {
         controller.flashHelper
     }
 

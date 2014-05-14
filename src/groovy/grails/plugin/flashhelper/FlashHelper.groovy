@@ -54,7 +54,7 @@ class FlashHelper {
      */
     private String lookupMsg(ArgumentsResolver argsResolver) throws NoSuchMessageException {
 
-        def args = argsResolver.getMessageArguments()
+        def args = argsResolver.messageArguments
         Locale locale = argsResolver.locale ?: LocaleContextHolder.locale
 
         if (argsResolver.resolveMessageArguments()) {
@@ -66,8 +66,8 @@ class FlashHelper {
 
         args = args.toArray()
 
-        String key = argsResolver.getMessage()
-        String defaultMsg = argsResolver.getDefaultMessage()
+        String key = argsResolver.message
+        String defaultMsg = argsResolver.defaultMessage
 
         try {
             defaultMsg ? messageSource.getMessage(key, args, defaultMsg, locale) : messageSource.getMessage(key, args, locale)
