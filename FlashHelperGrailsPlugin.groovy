@@ -4,7 +4,7 @@ import org.springframework.context.MessageSource
 class FlashHelperGrailsPlugin {
 
     // the plugin version
-    def version = "0.9.6"
+    def version = "0.9.7"
 
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.0 > *"
