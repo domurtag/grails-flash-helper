@@ -2,6 +2,7 @@ package grails.plugin.flashhelper
 
 import grails.test.ControllerUnitTestCase
 import org.springframework.context.NoSuchMessageException
+import org.springframework.context.support.DefaultMessageSourceResolvable
 
 
 /**
@@ -72,6 +73,24 @@ public class FlashHelperTestControllerTests extends ControllerUnitTestCase {
 
         fh.info 'key2'
         assertEquals getMessages(1..2), controller.flash.info
+    }
+
+    /**
+     * Test resolving an instance of MessageSourceResolvable
+     */
+    void testMessageSourceResolvableResolution() {
+
+        def fh = getFlashHelper()
+
+        // test a MessageSourceResolvable without args
+        fh.info new DefaultMessageSourceResolvable('key1')
+        assertEquals 'message number 1', controller.flash.info[0]
+        fh.clear()
+
+        // test a MessageSourceResolvable with args
+        String[] msgCodes = ['1ArgMsg']
+        fh.info new DefaultMessageSourceResolvable(msgCodes, ['arg'].toArray())
+        assertEquals 'message number arg', controller.flash.info[0]
     }
 
     /**

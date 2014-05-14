@@ -5,6 +5,7 @@ import grails.plugin.flashhelper.args.*
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.springframework.context.MessageSource
+import org.springframework.context.MessageSourceResolvable
 import org.springframework.context.NoSuchMessageException
 import org.springframework.context.i18n.LocaleContextHolder
 
@@ -92,8 +93,16 @@ class FlashHelper {
             controller.flash[flashKey] = []
         }
 
-        ArgumentsResolver argsResolver = ArgumentsResolverFactory.getInstance(args)
-        String resolvedMessage = lookupMsg(argsResolver)
+        String resolvedMessage
+
+        if (args[0] instanceof MessageSourceResolvable) {
+            resolvedMessage = messageSource.getMessage(args[0], LocaleContextHolder.locale)
+
+        } else {
+            ArgumentsResolver argsResolver = ArgumentsResolverFactory.getInstance(args)
+            resolvedMessage = lookupMsg(argsResolver)
+        }
+
         controller.flash[flashKey] << resolvedMessage
     }
 
