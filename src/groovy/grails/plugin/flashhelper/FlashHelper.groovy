@@ -18,10 +18,12 @@ class FlashHelper {
 
     private controller
     private MessageSource messageSource
+    private validKeys
 
-    public FlashHelper(controller, MessageSource messageSource) {
+    public FlashHelper(controller, MessageSource messageSource, flashHelperConfig) {
         this.controller = controller
         this.messageSource = messageSource
+        this.validKeys = flashHelperConfig?.keys
     }
 
     /**
@@ -39,8 +41,6 @@ class FlashHelper {
      * to one of these
      */
     private validateKey(key) {
-
-        def validKeys = ConfigurationHolder.config?.flashHelper?.keys
 
         if (validKeys && !(key in validKeys)) {
             throw new FlashKeyException("Flash key '$key' is not allowed by the configuration parameter 'flashHelper.keys'")

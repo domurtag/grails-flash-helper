@@ -1,16 +1,18 @@
 package grails.plugin.flashhelper
 
 import grails.test.ControllerUnitTestCase
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.context.NoSuchMessageException
 import org.springframework.context.support.DefaultMessageSourceResolvable
 
 
 /**
- *
  * Tests for <code>FlashHelper</code>. I'm using <code>ControllerUnitTestCase</code> only as a means of getting
  * a reference to a controller, which I'll need to instantiate the <code>FlashHelper</code>
  */
 public class FlashHelperTestControllerTests extends ControllerUnitTestCase {
+
+    GrailsApplication grailsApplication
 
     /**
      * Creates a single message or a list of messages
@@ -21,20 +23,6 @@ public class FlashHelperTestControllerTests extends ControllerUnitTestCase {
 
     private FlashHelper getFlashHelper() {
         controller.flashHelper
-    }
-
-    /**
-     * This must be the first test that is executed. For reasons I don't understand, the first time getFlashHelper() is
-     * called by the tests, it throws a MissingPropertyException.
-     *
-     * TODO: Get to the bottom of this mystery and remove this ugly workaround
-     */
-    void testInitFlashHelper() {
-        try {
-            getFlashHelper()
-        } catch (MissingPropertyException ex) {
-
-        }
     }
 
     /**
@@ -267,14 +255,14 @@ public class FlashHelperTestControllerTests extends ControllerUnitTestCase {
     /**
      * Test the clear() method 
      */
-    public void testClear() {
+    void testClear() {
         def fh = getFlashHelper()
         fh.info(["msg1", "msg2"])
         fh.clear()
         assertEquals 0, controller.flash.size()
     }
 
-    public void testMethodChaining() {
+    void testMethodChaining() {
         def fh = getFlashHelper().info("infoMsg").warn("warnMsg")
 
         assertEquals(['infoMsg'], controller.flash.info)
@@ -289,20 +277,23 @@ public class FlashHelperTestControllerTests extends ControllerUnitTestCase {
      * If the keys that may be used are restricted and an attempt is made to place a message in flash scope with an
      * prohibited key, an exception should be thrown
      */
-    public void testRestrictedFlashKeys() {
+    void testSingleFlashKeyPermitted() {
+
+        grailsApplication.config.flashHelper.keys = "info"
 
         def fh = getFlashHelper()
-
-        // Single 'info' key is allowed
-        mockConfig('''flashHelper.keys="info"''')
         fh.info 'foo'
 
         shouldFail(FlashKeyException) {
             fh.badKey "foo"
         }
+    }
 
-        // Multiple keys allowed
-        mockConfig('''flashHelper.keys=["info", "warn"]''')
+    void testMultipleFlashKeysPermitted() {
+
+        grailsApplication.config.flashHelper.keys = ["info", "warn"]
+
+        def fh = getFlashHelper()
         fh.info 'foo'
         fh.warn 'foo'
 

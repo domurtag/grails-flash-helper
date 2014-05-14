@@ -1,17 +1,28 @@
 import grails.plugin.flashhelper.FlashHelper
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.context.MessageSource
 
 class FlashHelperGrailsPlugin {
 
     // the plugin version
-    def version = "0.9.7"
+    def version = "0.9.8"
 
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.0 > *"
 
     // resources that are excluded from plugin packaging
-    def pluginExcludes = ["grails-app/conf", "grails-app/controllers", "grails-app/domain", "grails-app/i18n",
-            "grails-app/services", "grails-app/utils", "grails-app/views", "lib", "scripts", "web-app"]
+    def pluginExcludes = [
+            "grails-app/conf",
+            "grails-app/controllers",
+            "grails-app/domain",
+            "grails-app/i18n",
+            "grails-app/services",
+            "grails-app/utils",
+            "grails-app/views",
+            "lib",
+            "scripts",
+            "web-app"
+    ]
 
     // the other plugins this plugin depends on
     def dependsOn = [controllers: grailsVersion]
@@ -38,33 +49,33 @@ Simplifies and standardizes the process of adding/reading messages in the flash 
     def license = "APACHE"
 
     // Location of the plugin's issue tracker.
-    def issueManagement = [ system: "GitHub", url: "https://github.com/domurtag/grails-flash-helper/issues" ]
+    def issueManagement = [system: "GitHub", url: "https://github.com/domurtag/grails-flash-helper/issues"]
 
     // Online location of the plugin's browseable source code.
-    def scm = [ url: "https://github.com/domurtag/grails-flash-helper" ]
+    def scm = [url: "https://github.com/domurtag/grails-flash-helper"]
 
-    def doWithWebDescriptor = {xml ->
+    def doWithWebDescriptor = { xml ->
     }
 
     def doWithSpring = {
     }
 
-    def doWithDynamicMethods = {ctx ->
+    def doWithDynamicMethods = { ctx ->
         addFlashHelperMethod(application, ctx)
     }
 
-    def doWithApplicationContext = {applicationContext ->
+    def doWithApplicationContext = { applicationContext ->
         // Implement post initialization spring config (optional)
     }
 
-    def onChange = {event ->
+    def onChange = { event ->
         // Implement code that is executed when any artefact that this plugin is
         // watching is modified and reloaded. The event contains: event.source,
         // event.application, event.manager, event.ctx, and event.plugin.
         addFlashHelperMethod(event.application, event.ctx)
     }
 
-    def onConfigChange = {event ->
+    def onConfigChange = { event ->
         // Implement code that is executed when the project configuration changes.
         // The event is the same as for 'onChange'.
     }
@@ -72,18 +83,19 @@ Simplifies and standardizes the process of adding/reading messages in the flash 
     /**
      * add getFlashHelper() to controllers
      */
-    private addFlashHelperMethod(application, applicationContext) {
+    private addFlashHelperMethod(GrailsApplication grailsApplication, applicationContext) {
 
         MessageSource messageSource = applicationContext.getBean('messageSource')
+        def flashHelperConfig = grailsApplication.config.flashHelper
 
-        application.controllerClasses*.metaClass*.getFlashHelper = {
+        grailsApplication.controllerClasses*.metaClass*.getFlashHelper = {
 
             def controllerInstance = delegate
             MetaClass controllerMetaClass = controllerInstance.metaClass
 
             // Avoid creating a new FlashHelper each time the 'flashHelper' property is accessed
             if (!controllerMetaClass.hasProperty('flashHelperInstance')) {
-                controllerMetaClass.flashHelperInstance = new FlashHelper(controllerInstance, messageSource)
+                controllerMetaClass.flashHelperInstance = new FlashHelper(controllerInstance, messageSource, flashHelperConfig)
             }
 
             return controllerInstance.flashHelperInstance
