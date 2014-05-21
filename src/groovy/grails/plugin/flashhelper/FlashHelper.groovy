@@ -2,8 +2,6 @@ package grails.plugin.flashhelper
 
 import grails.plugin.flashhelper.args.*
 
-
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.springframework.context.MessageSource
 import org.springframework.context.MessageSourceResolvable
 import org.springframework.context.NoSuchMessageException

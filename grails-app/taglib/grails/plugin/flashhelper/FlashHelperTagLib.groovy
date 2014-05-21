@@ -1,7 +1,6 @@
 package grails.plugin.flashhelper
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
-import grails.plugin.flashhelper.FlashKeyException
+import org.codehaus.groovy.grails.commons.GrailsApplication
 
 /**
  * Supports retrieving messages from the flash scope, particularly those placed there using the <code>FlashHelper</code>
@@ -10,6 +9,8 @@ class FlashHelperTagLib {
     static namespace = 'flashMsg'
 
     static final DEFAULT_SEPARATOR = '<br/>'
+
+    GrailsApplication grailsApplication
 
     /**
      * Retrieves message(s) from the flash scope.
@@ -25,7 +26,6 @@ class FlashHelperTagLib {
         def msg = getFlashMsg(attrs)
 
         if (msg) {
-            //def separator = attrs.sep ?: ConfigurationHolder.config?.flashHelper?.separator ?: DEFAULT_SEPARATOR
             def separator = getEffectiveParamValue(DEFAULT_SEPARATOR, attrs, 'sep', 'separator')
 
             def result = msg instanceof Collection ? msg.join(separator) : msg
@@ -88,7 +88,7 @@ class FlashHelperTagLib {
      */
     private getEffectiveParamValue(defaultValue, attrs, String attrsKey, String configKey = attrsKey) {
 
-        def configValue = ConfigurationHolder.config?.flashHelper?."$configKey"
+        def configValue = grailsApplication.config.flashHelper?."$configKey"
         attrs[attrsKey] ?: configValue ?: defaultValue
     }
 }
