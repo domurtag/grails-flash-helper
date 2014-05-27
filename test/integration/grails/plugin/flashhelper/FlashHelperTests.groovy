@@ -26,11 +26,7 @@ public class FlashHelperTests extends GroovyTestCase {
         // the FlashHelper's controller constructor arg doesn't have to be an actual controller,
         // anything that has a .flash property which returns a flash scope will suffice
         flash = new GrailsFlashScope()
-        def mockController = new Object()
-
-        mockController.metaClass.getFlash = {
-            flash
-        }
+        def mockController = [flash: flash]
 
         new FlashHelper(mockController, messageSource, grailsApplication.config.flashHelper)
     }
