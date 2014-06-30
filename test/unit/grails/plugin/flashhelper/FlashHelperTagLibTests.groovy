@@ -12,8 +12,9 @@ class FlashHelperTagLibTests {
     void setUp() {
         flashMap = [oneMsg: 'msg1', msgList: ['msg2', 'msg3'], oneMsgInList: ['msg1']]
 
-        // Mock the flash scope with a map
-        tagLib.metaClass.getFlash = {-> flashMap}
+        // Mock the flash scope with a map. Since upgrading from Grails 2.2.0 to 2.4.0 the mocking must be done on
+        // all instances (FlashHelperTagLib) rather than the instance available in this test (tagLib).
+        FlashHelperTagLib.metaClass.getFlash = {-> flashMap}
     }
 
     void testFlashMocking() {
@@ -106,7 +107,6 @@ class FlashHelperTagLibTests {
         }
 
         // Change the default behaviour to error
-        // TODO: Reinstate this test
         grailsApplication.config.flashHelper.keyNotFound = "error"
 
         shouldFail(FlashKeyException) {
