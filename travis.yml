@@ -9,4 +9,8 @@ before_install:
 - sudo apt-get -y install grails-ppa # not sure if necessary
 - sudo apt-get install grails-2.4.0 # or the grails version.
 
+branches:
+  only:
+    - master
+
 script: grails test-app
